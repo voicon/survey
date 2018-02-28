@@ -1,0 +1,25 @@
+.survey form input[type=text] {
+    width: 300px;
+    line-height: 30px;
+    padding-left: 5px;
+}
+.survey form textarea {
+    width: 303px;
+    height: 100px;
+}
+.survey form select {
+    width: 309px;
+    height: 30px;
+    line-height: 30px;
+}
+.survey form label {
+    width: 150px;
+    float: left;
+    text-align: right;
+    margin-right: 10px;
+    line-height: 20px;
+}
+.survey form .group {
+    margin-bottom: 5px;
+    width: 500px;
+}
