@@ -27,7 +27,10 @@ if($id > 0) {
     }
 </style>
 <body class="example">
-
+<ul>
+    <li><a href="survey.php" target="_blank">Do survey</a></li>
+    <li><a href="surveys.php" target="_blank">Admin page</a></li>
+</ul>
 <!-- <div id="tree" class="demo-card-wide mdl-card mdl-shadow--2dp"> -->
 <div id="tree" style="display: none"></div>
 
@@ -36,13 +39,13 @@ if($id > 0) {
 <!-- Accent-colored raised button with ripple -->
 <?php $aTpls = CF::getAllTemplates();?>
 <select id="template">
-    <option value=""> -- Select --</option>
+    <option value=""> -- Select an existing template to edit --</option>
 <?php foreach ($aTpls as $tpl): ?>
 <?php echo '<option actived="' . $tpl['actived'] . '" value="' . $tpl['id'] . '" '.($tpl['id'] == $id ? ' selected="selected" ' : '').'>' . $tpl['name'] . '</option>'; ?>
 <?php endforeach;?>
 </select>
 <br />
-<input type="text" id="name" style="width: 200px" placeholder="New survey template name"/>
+<input type="text" id="name" style="width: 300px" placeholder="Create new survey template name"/>
 <input type="checkbox" id="actived" <?php echo ($id > 0 && $item['actived'] == 1) ? ' checked="checked" ' : '' ?>/> Is actived?
 <button id="btnGridSave"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">

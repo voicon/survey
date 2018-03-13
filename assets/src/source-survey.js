@@ -4,7 +4,11 @@ function nodeRender($tdList, i, data) {
             $tdList.eq(i)[0].innerHTML = '';
             break;
         case '1':
-            $tdList.eq(i)[0].innerHTML = '<input type="text" />';
+            var val = '';
+            if(data.opts_data != undefined && data.opts_data['opt_' + (i-1)] != undefined) {
+                val = data.opts_data['opt_' + (i-1)];
+            }
+            $tdList.eq(i)[0].innerHTML = '<input type="text" value="' + val + '"/>';
             break;
         default:
             $tdList.eq(i)[0].innerHTML = data.opts['opt_' + (i-1)];
@@ -28,12 +32,12 @@ $(function(){
         jQuery.ajax({
             type: 'POST',
             url: urls.main,
-            data: {a: 's-survey', f: jQuery('#name').val(), id: jQuery('#template').val(),
+            data: {a: 's-survey', f: jQuery('#name').val(), id: id,
                 data: JSON.stringify(readTree($("#treegrid").fancytree("getTree"))),
                 form: jQuery('#form').serialize()},
             success: function(resultData) {
                 alert("Save Complete!");
-                //location.href = urls.survey + resultData.id;
+                location.href = urls.survey + resultData.id;
             }
         });
     });

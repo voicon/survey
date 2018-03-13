@@ -66,7 +66,7 @@ switch ($aParams['a']) {
         $id = $aParams['id'];
         $sData = '';
         if($id > 0) {
-            if ($result = $dbConn->query("SELECT * FROM " . CF::TBL_SURVEY . " WHERE id = $id")) {
+            if ($result = $dbConn->query("SELECT * FROM " . CF::TBL_SURVEYS . " WHERE id = $id")) {
                 while ($row = $result->fetch_assoc()) {
                     $sData = $row['content'];
                 }
@@ -84,8 +84,12 @@ switch ($aParams['a']) {
         parse_str($aParams['form'], $aForm);
         /* @var $dbConn mysqli */
         $sNow = date("Y-m-d H:i:s");
-        if($id > 0) {
-            $sSql = "UPDATE " . CF::TBL_SURVEY . " SET 
+        $age = DateTime::createFromFormat('Y-m-d', $aForm['birthday'], CF::tz())
+            ->diff(new DateTime('now', CF::tz()))
+            ->y;
+        try {
+            if($id > 0) {
+                $sSql = "UPDATE " . CF::TBL_SURVEYS . " SET 
                 fullname = ?, 
                 birthday = ?,
                 gender = ?,
@@ -97,43 +101,61 @@ switch ($aParams['a']) {
                 relationship = ?,
                 user_id = ?,
                 no = ?, 
-                updated_at = ?; ";
-            $stmt = $dbConn->prepare($sSql);
-            $stmt->bind_param('sssssssssdss',
-                $aForm['fullname'],
-                $aForm['birthday'],
-                $aForm['gender'],
-                $aForm['age'],
-                $aForm['address'],
-                $aForm['company'],
-                $aForm['information'],
-                $aForm['reporter'],
-                $aForm['relationship'],
-                $aForm['user_id'],
-                $aForm['no'],
-                $aForm['updated_at']);
-        } else {
-            $sSql = "INSERT INTO " . CF::TBL_SURVEY . " (created_at, fullname, birthday, gender, age, address, company, information, reporter, relationship, user_id, no, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            $stmt = $dbConn->prepare($sSql);
-            $stmt->bind_param('ssssssssssdss', $sFile, $sData, $sNow, $sNow);
-        }
-        if ($stmt === false) {
-            trigger_error($dbConn->error, E_USER_ERROR);
-            $aData['message'] = "Error: " . $sSql . "<br>" . $dbConn->error;
-        }
-        $status = $stmt->execute();
-        if ($status === false) {
-            trigger_error($stmt->error, E_USER_ERROR);
-            $aData['message'] = "Error: " . $sSql . "<br>" . $stmt->error;
-        } else {
-            if($id <= 0) {
-                $id = $dbConn->insert_id;
+                updated_at = ?,
+                content = ?; ";
+                $stmt = $dbConn->prepare($sSql);
+                $stmt->bind_param('sssssssssdsss',
+                    $aForm['fullname'],
+                    $aForm['birthday'],
+                    $aForm['gender'],
+                    $age,
+                    $aForm['address'],
+                    $aForm['company'],
+                    $aForm['information'],
+                    $aForm['reporter'],
+                    $aForm['relationship'],
+                    $aForm['user_id'],
+                    $aForm['no'],
+                    $sNow,
+                    $sData);
+            } else {
+                $sSql = "INSERT INTO " . CF::TBL_SURVEYS . " (created_at, fullname, birthday, gender, age, address, company, information, reporter, relationship, user_id, `no`, updated_at, content) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                $stmt = $dbConn->prepare($sSql);
+                $stmt->bind_param('ssssssssssdsss',
+                    $sNow,
+                    $aForm['fullname'],
+                    $aForm['birthday'],
+                    $aForm['gender'],
+                    $age,
+                    $aForm['address'],
+                    $aForm['company'],
+                    $aForm['information'],
+                    $aForm['reporter'],
+                    $aForm['relationship'],
+                    $aForm['user_id'],
+                    $aForm['no'],
+                    $sNow,
+                    $sData);
             }
-        }
-        $aData['id'] = $id;
-        $stmt->close();
 
+            if ($stmt === false) {
+                trigger_error($dbConn->error, E_USER_ERROR);
+                $aData['message'] = "Error: " . $sSql . "<br>" . $dbConn->error;
+            }
+            $status = $stmt->execute();
+            if ($status === false) {
+                trigger_error($stmt->error, E_USER_ERROR);
+                $aData['message'] = "Error: " . $sSql . "<br>" . $stmt->error;
+            } else {
+                if($id <= 0) {
+                    $id = $dbConn->insert_id;
+                }
+            }
+            $aData['id'] = $id;
+            $stmt->close();
+        } catch (Exception $e) {
+            print_r($e);
+        }
         //@file_put_contents(ROOT . '/data/' . $sFile, $sData);
         header("Content-type: application/json; charset=utf-8");
         echo json_encode($aData);

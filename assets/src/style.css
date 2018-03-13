@@ -1,4 +1,4 @@
-.survey form input[type=text] {
+.survey form input[type=text], .survey form input[type=date] {
     width: 300px;
     line-height: 30px;
     padding-left: 5px;

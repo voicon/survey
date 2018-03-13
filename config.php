@@ -42,6 +42,55 @@ class CF {
         }
         return $item;
     }
+    public static function v($aData, $sField, $sDefault='') {
+        return isset($aData[$sField]) ? $aData[$sField] : ($sDefault ? $sDefault : '');
+    }
+
+    public static function tz() {
+        return new DateTimeZone('Asia/Ho_Chi_Minh');
+    }
+
+    public static function db() {
+        global $dbConn;
+        $sTbl = self::v($_REQUEST, 'tbl', 'users');
+
+        if(!in_array($sTbl, array('users', 'surveys', 'survey_templates'))) {
+            die('OOps!');
+        }
+        $sSql = "SHOW COLUMNS FROM `{$sTbl}`";
+        $aCols = array();
+        if ($result = $dbConn->query($sSql)) {
+            while ($row = $result->fetch_assoc()) {
+                $aCols[] = $row;
+            }
+            /* free result set */
+            mysqli_free_result($result);
+        }
+
+        $aTblCols = array();
+        $aIgnoredCols = array('content');
+        $sSelect = "";
+        foreach ($aCols as $i => $oCol) {
+            if(in_array($oCol['Field'], $aIgnoredCols)) {
+                unset($aCols[$i]);
+                continue;
+            }
+            $aTblCols[] = $oCol['Field'];
+            $sSelect .= ",".$oCol['Field'];
+        }
+        $sSelect = trim($sSelect, ',');
+        $aItems = array();
+
+        $sSql = "SELECT {$sSelect} FROM {$sTbl} WHERE 1";
+        if ($result = $dbConn->query($sSql)) {
+            while ($row = $result->fetch_assoc()) {
+                $aItems[] = $row;
+            }
+            /* free result set */
+            mysqli_free_result($result);
+        }
+        return array($aCols, $aItems);
+    }
 }
 
 /*
