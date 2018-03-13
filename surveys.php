@@ -14,9 +14,9 @@ list ($aCols, $aItems) = CF::db();
         <form>
             <p>Choose data want to display
                 <select name="tbl">
-                    <option value="users">Users</option>
-                    <option value="surveys">Survey data</option>
-                    <option value="survey_templates">Survey templates</option>
+                    <option value="users" data="#">Users</option>
+                    <option value="surveys" data="survey">Survey data</option>
+                    <option value="survey_templates" data="survey_tpl">Survey templates</option>
                 </select>
             </p>
         </form>
@@ -41,13 +41,14 @@ list ($aCols, $aItems) = CF::db();
         <?php foreach ($aItems as $aItem):?>
         <tr>
             <?php foreach ($aCols as $oCol):?>
-                <td><?php echo CF::v($aItem, $oCol['Field'])?></td>
+                <td class="f-<?php echo $oCol['Field'] ?>"><?php echo CF::v($aItem, $oCol['Field'])?></td>
             <?php endforeach ?>
         </tr>
         <?php endforeach ?>
         </tbody>
     </table>
 </div>
+<script src="assets/src/common.js"></script>
 <link href="assets/src/jquery.dataTables.css" rel="stylesheet">
 <script src="assets/src/jquery.dataTables.min.js"></script>
 <script src="assets/src/jquery.dataTables.columnFilter.js"></script>
@@ -58,8 +59,7 @@ list ($aCols, $aItems) = CF::db();
         });
         jQuery('.filter select').change(function() {
             jQuery('.filter form').submit();
-        })
-        jQuery(".filter select").val('<?php echo CF::v($_REQUEST, 'tbl')?>');
+        });
     });
 </script>
 </body>

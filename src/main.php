@@ -102,9 +102,9 @@ switch ($aParams['a']) {
                 user_id = ?,
                 no = ?, 
                 updated_at = ?,
-                content = ?; ";
+                content = ? WHERE id = ?; ";
                 $stmt = $dbConn->prepare($sSql);
-                $stmt->bind_param('sssssssssdsss',
+                $stmt->bind_param('sssssssssdsssd',
                     $aForm['fullname'],
                     $aForm['birthday'],
                     $aForm['gender'],
@@ -117,7 +117,8 @@ switch ($aParams['a']) {
                     $aForm['user_id'],
                     $aForm['no'],
                     $sNow,
-                    $sData);
+                    $sData,
+                    $id);
             } else {
                 $sSql = "INSERT INTO " . CF::TBL_SURVEYS . " (created_at, fullname, birthday, gender, age, address, company, information, reporter, relationship, user_id, `no`, updated_at, content) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
                 $stmt = $dbConn->prepare($sSql);
