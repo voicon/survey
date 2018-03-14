@@ -1,15 +1,6 @@
 var CLIPBOARD = null;
 var maxPlaceHolder = 6;
 
-var urls = {
-    main: "/" + BN + "/src/main.php",
-    survey_tpl_edit: "/" + BN + "/src/main.php?a=edit&id=",
-    survey_tpl: "/" + BN + "/survey-tpl.php?id=",
-    survey_edit: "/" + BN + "/src/main.php?a=e-survey&id=",
-    survey: "/" + BN + "/survey.php?id="
-
-};
-
 function nodeRender($tdList, i, data) {}
 
 function readTree(tree) {

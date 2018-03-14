@@ -3,6 +3,13 @@ require_once 'config.php';
 require_once ROOT . '/src/tpl/header.php';
 
 list ($aCols, $aItems) = CF::db();
+$tbl = CF::v($_REQUEST, 'tbl', 'users');
+$sLink = '#';
+if($tbl == 'surveys') {
+    $sLink = $urls['survey'];
+} else if($tbl == 'survey_templates') {
+    $sLink = $urls['survey_tpl'];
+}
 ?>
 <body class="admin">
 <ul>
@@ -41,7 +48,13 @@ list ($aCols, $aItems) = CF::db();
         <?php foreach ($aItems as $aItem):?>
         <tr>
             <?php foreach ($aCols as $oCol):?>
-                <td class="f-<?php echo $oCol['Field'] ?>"><?php echo CF::v($aItem, $oCol['Field'])?></td>
+                <td class="f-<?php echo $oCol['Field'] ?>">
+                    <?php if ($oCol['Field'] == 'id'):?>
+                    <a href="<?php echo $sLink . CF::v($aItem, $oCol['Field'])?>" target="_blank"><?php echo CF::v($aItem, $oCol['Field'])?></a>
+                    <?php else: ?>
+                    <?php echo CF::v($aItem, $oCol['Field'])?>
+                    <?php endif?>
+                </td>
             <?php endforeach ?>
         </tr>
         <?php endforeach ?>

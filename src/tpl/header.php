@@ -20,5 +20,6 @@
     <!-- End_Exclude -->
     <script type="text/javascript">
         var BN = "<?php echo BN ?>";
+        var urls = <?php echo json_encode($urls) ?>;
     </script>
 </head>

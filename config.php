@@ -2,6 +2,13 @@
 define('ROOT', __DIR__);
 define('BN', 'survey');
 
+$urls = array(
+    "main" =>  "/" . BN . "/src/main.php",
+    "survey_tpl_edit" =>  "/" . BN . "/src/main.php?a=edit&id=",
+    "survey_tpl" =>  "/" . BN . "/survey-tpl.php?id=",
+    "survey_edit" =>  "/" . BN . "/src/main.php?a=e-survey&id=",
+    "survey" =>  "/" . BN . "/survey.php?id="
+);
 
 class CF {
     const TBL_SURVEY_TEMPLATE = 'survey_templates';
