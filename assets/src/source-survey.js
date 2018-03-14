@@ -1,14 +1,31 @@
+function getEle(data, i) {
+    var val = '';
+    var options = [
+        {key: 'DK', val: "Không biết"},
+        {key: 2, val: "Có, thường thường"},
+        {key: 1, val: "Đôi khi hay một phần"},
+        {key: 0, val: "Không, không bao giờ"},
+        {key: 'N', val: "Không áp dụng"}
+
+    ];
+    if(data.opts_data != undefined && data.opts_data['opt_' + (i-1)] != undefined) {
+        val = data.opts_data['opt_' + (i-1)];
+    }
+    var select = ['<select>'];
+    options.forEach(function(option) {
+        select.push('<option value="'+option.key+'" '+(option.key == val ? 'selected="selected"' : '')+'>' + option.val + '</option>');
+    });
+    select.push('</select>')
+    return select.join('');
+}
+
 function nodeRender($tdList, i, data) {
     switch (data.opts['opt_' + (i-1)]) {
         case '0':case undefined:
             $tdList.eq(i)[0].innerHTML = '';
             break;
         case '1':
-            var val = '';
-            if(data.opts_data != undefined && data.opts_data['opt_' + (i-1)] != undefined) {
-                val = data.opts_data['opt_' + (i-1)];
-            }
-            $tdList.eq(i)[0].innerHTML = '<input type="text" value="' + val + '"/>';
+            $tdList.eq(i)[0].innerHTML = getEle(data, i);
             break;
         default:
             $tdList.eq(i)[0].innerHTML = data.opts['opt_' + (i-1)];
@@ -59,7 +76,7 @@ function readTree(tree) {
             node.key = id;
         }
         for(var i=2;i<(maxPlaceHolder + 2);i++) {
-            var input = tdList.eq(i).find("input");
+            var input = tdList.eq(i).find("select");
             if(input.length > 0) {
                 opts_data['opt_' + (i-1)] = input.val();
             } else {
