@@ -45,7 +45,7 @@ if($id > 0) {
 <?php endforeach;?>
 </select>
 <br />
-<input type="text" id="name" style="width: 300px" placeholder="Create new survey template name"/>
+<input type="text" id="name" style="width: 300px" placeholder="Create new survey template name" value="<?php echo $id > 0 ? $item['name'] : '' ?>"/>
 <input type="checkbox" id="actived" <?php echo ($id > 0 && $item['actived'] == 1) ? ' checked="checked" ' : '' ?>/> Is actived?
 <button id="btnGridSave"
         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">

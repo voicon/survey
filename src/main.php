@@ -19,9 +19,9 @@ switch ($aParams['a']) {
         /* @var $dbConn mysqli */
         $sNow = date("Y-m-d H:i:s");
         if($id > 0) {
-            $sSql = "UPDATE " . CF::TBL_SURVEY_TEMPLATE . " SET name = ?, content = ?, updated_at = ?; ";
+            $sSql = "UPDATE " . CF::TBL_SURVEY_TEMPLATE . " SET name = ?, content = ?, updated_at = ? WHERE id = ?; ";
             $stmt = $dbConn->prepare($sSql);
-            $stmt->bind_param('sss', $sFile, $sData, $sNow);
+            $stmt->bind_param('sssd', $sFile, $sData, $sNow, $id);
         } else {
             $sSql = "INSERT INTO " . CF::TBL_SURVEY_TEMPLATE . " (name, content, created_at, updated_at) VALUES (?, ?, ?, ?);";
             $stmt = $dbConn->prepare($sSql);
